@@ -26,25 +26,25 @@ public class JpaRepositoryDemo {
      */
     @Test
     public void runJpaRepositoryMethods() {
-        departmentRepository.save(new Department("Computer Science"));
-        departmentRepository.flush();
-
-        departmentRepository.saveAndFlush(new Department("Fine Arts"));
-
-        departmentRepository.save(new Department("Social Science"));
-
-        System.out.println("\n*************3 Departments*************");
-        departmentRepository.findAll().forEach(System.out::println);
-
-        departmentRepository.deleteInBatch(
-                departmentRepository.findAll().subList(0,1));
-
-        System.out.println("\n*************1 Less Departments*************");
-        departmentRepository.findAll().forEach(System.out::println);
-
-        departmentRepository.deleteAllInBatch();
-        System.out.println("\n*************Zero Departments*************");
-        departmentRepository.findAll().forEach(System.out::println);
+//        departmentRepository.save(new Department("Computer Science"));
+//        departmentRepository.flush();
+//
+//        departmentRepository.saveAndFlush(new Department("Fine Arts"));
+//
+//        departmentRepository.save(new Department("Social Science"));
+//
+//        System.out.println("\n*************3 Departments*************");
+//        departmentRepository.findAll().forEach(System.out::println);
+//
+//        departmentRepository.deleteInBatch(
+//                departmentRepository.findAll().subList(0,1));
+//
+//        System.out.println("\n*************1 Less Departments*************");
+//        departmentRepository.findAll().forEach(System.out::println);
+//
+//        departmentRepository.deleteAllInBatch();
+//        System.out.println("\n*************Zero Departments*************");
+//        departmentRepository.findAll().forEach(System.out::println);
     }
 
     @Before
