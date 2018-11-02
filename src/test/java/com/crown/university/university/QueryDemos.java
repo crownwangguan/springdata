@@ -1,5 +1,6 @@
 package com.crown.university.university;
 
+import com.crown.university.university.domain.Course;
 import com.crown.university.university.domain.Person;
 import com.crown.university.university.repo.CourseRepository;
 import com.crown.university.university.repo.DepartmentRepository;
@@ -80,4 +81,35 @@ public class QueryDemos {
                 studentRepository.findTop3ByOrderByAgeDesc());
 
     }
+
+    /**
+     * @Query Queries
+     *
+     * Courses persisted to H2 in-Memory database at startup.
+     * @see UniversityApplication
+     */
+    @Test
+    public void jpqlQueries() {
+        //*******Method Simplification*******
+
+        System.out.println("Find Courses where Jones is the department Chair with Property Expression");
+        courseRepository.findByDepartmentChairMemberLastName("Jones").forEach(System.out::println);
+
+        //Select c from Course c where c.department.chair.member.lastName=:chair
+        System.out.println("\nFind Courses where Jones is the department Chair with @Query");
+        courseRepository.findByChairLastName("Jones").forEach(System.out::println);
+
+        //*******Complex Queries********
+        Course english101 = courseRepository.findByName("English 101");
+
+        //Select c from Course c join c.prerequisites p where p.id = ?1
+        System.out.println("\nFind Courses where English 101 is a prerequisite");
+        courseRepository.findCourseByPrerequisite(english101.getId())
+                .forEach(System.out::println);
+
+        //Select new com.example.university.view.CourseView (c.name, c.instructor.member.lastName, c.department.name) from Course c where c.id=?1
+        System.out.println("\nCourseView for English 101 \n" +
+                courseRepository.getCourseView(english101.getId()));
+    }
+
 }
