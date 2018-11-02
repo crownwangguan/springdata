@@ -1,15 +1,20 @@
 package com.crown.university.university;
 
 import com.crown.university.university.domain.Course;
+import com.crown.university.university.domain.Department;
 import com.crown.university.university.domain.Person;
+import com.crown.university.university.domain.Staff;
 import com.crown.university.university.repo.CourseRepository;
 import com.crown.university.university.repo.DepartmentRepository;
 import com.crown.university.university.repo.StaffRepository;
 import com.crown.university.university.repo.StudentRepository;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -110,6 +115,64 @@ public class QueryDemos {
         //Select new com.example.university.view.CourseView (c.name, c.instructor.member.lastName, c.department.name) from Course c where c.id=?1
         System.out.println("\nCourseView for English 101 \n" +
                 courseRepository.getCourseView(english101.getId()));
+    }
+
+    /**
+     * Queries that use Paging and Sorting
+     *
+     * Courses persisted to H2 in-Memory database at startup.
+     * @see UniversityApplication
+     */
+    @Test
+    public void pagingAndSortingQueries() {
+
+        System.out.println("\nFind all 3-credit courses");
+        courseRepository.findByCredits(3).forEach(System.out::println);
+
+        System.out.println("\nFind first 4 3-credit courses, sort by credit, then course name");
+        Page<Course> courses = courseRepository.findByCredits(3,
+                new PageRequest(0, 4, Sort.Direction.ASC, "credits", "name"));
+        courses.forEach(System.out::println);
+
+        System.out.println("\nFind all staff members, sort alphabetically by last name");
+        Sort sortByLastName = new Sort(Sort.Direction.ASC, "member.lastName");
+        staffRepository.findAll(sortByLastName).forEach(System.out::println);
+
+        Page<Staff> members = staffRepository.findAll(new PageRequest(0, 5, sortByLastName));
+        System.out.println("\nTotal number of staff members=" + members.getTotalElements());
+        System.out.println("Total number of 5-element-pages=" + members.getTotalPages());
+        System.out.println("Find first 5 Staff members, sort alphabetically by last name");
+        members.forEach(System.out::println);
+    }
+
+    /**
+     * Queries using Query by Example
+     *
+     * Departments persisted to H2 in-Memory database at startup.
+     * @see UniversityApplication
+     */
+    @Test
+    public void queryByExample() {
+        System.out.println("\nFind the Department with the name 'Humanities' \n" +
+                departmentRepository.findOne(Example.of(new Department("Humanities", null))));
+
+
+        System.out.println("\nFind Departments with the first name of the chair is 'John'");
+        departmentRepository.findAll(Example.of(
+                new Department(null, new Staff(new Person("John", null))))).forEach(System.out::println);
+
+        System.out.println("\nFind All Departments with the name ending in 'sciences', case insensitive");
+        departmentRepository.findAll(Example.of(new Department("sciences", null),
+                ExampleMatcher.matching().
+                        withIgnoreCase().
+                        withStringMatcher(ExampleMatcher.StringMatcher.ENDING))).forEach(System.out::println);
+
+    }
+
+    @Before
+    @After
+    public void printBanner() {
+        System.out.println("*************************************************************************************");
     }
 
 }
