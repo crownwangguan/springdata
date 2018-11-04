@@ -1,63 +1,55 @@
 package com.crown.university.university.domain;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
-@Table(name="Department")
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+/**
+ * Mongo Document for a Department of study at the University.
+ */
+@Document
 public class Department {
     @Id
-    @GeneratedValue
     private Integer id;
 
-    @Column
     private String name;
 
-    @OneToOne
+    @DBRef(db = "chair")
     private Staff chair;
 
-    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Course> courses = new ArrayList<>();
-
-    public Department(String name, Staff chair) {
+    public Department(Integer id, String name, Staff chair) {
+        this.id = id;
         this.name = name;
         this.chair = chair;
     }
 
-    protected Department() {
+    public Department() {
     }
 
     public Integer getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void addCourse(Course course) {
-        courses.add(course);
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setChair(Staff chair) {
-        this.chair = chair;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
-
     @Override
     public String toString() {
         return "Department{" +
-                "chair=" + chair +
+                "id=" + id +
                 ", name='" + name + '\'' +
-                ", id=" + id +
+                ", chair=" + chair +
                 '}';
     }
 }
