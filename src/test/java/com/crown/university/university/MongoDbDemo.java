@@ -39,7 +39,7 @@ public class MongoDbDemo {
         staffRepository.findAll(sortByLastName).forEach(System.out::println);
 
         System.out.println("\nFind first 5 Staff members, sort alphabetically by last name");
-        Page<Staff> members = staffRepository.findAll(new PageRequest(0, 5, sortByLastName));
+        Page<Staff> members = staffRepository.findAll(PageRequest.of(0, 5, sortByLastName));
         members.forEach(System.out::println);
 
 
@@ -69,8 +69,8 @@ public class MongoDbDemo {
         departmentRepository.findNameByPattern(".[Ss]ciences").forEach(System.out::println);
 
 
-        //Invalid Method, will fail at runtime
-        System.out.println("\nInvalid Method, cannot cross DBRef's in queries");
-        departmentRepository.findByChairMemberLastName("Jones");
+//        //Invalid Method, will fail at runtime
+//        System.out.println("\nInvalid Method, cannot cross DBRef's in queries");
+//        departmentRepository.findByChairMemberLastName("Jones");
     }
 }
