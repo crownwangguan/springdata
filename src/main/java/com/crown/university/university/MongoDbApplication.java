@@ -7,14 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
 
 /**
  * Main Spring Boot Class for the University Application.
  * On Startup Initialize Database with Staff and Departments.
  */
 @SpringBootApplication
-@Import(InMemoryMongoConfig.class)
 public class MongoDbApplication implements CommandLineRunner {
     @Autowired
     StaffRepository staffRepository;
