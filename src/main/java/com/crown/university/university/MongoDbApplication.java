@@ -3,6 +3,8 @@ package com.crown.university.university;
 import com.crown.university.university.domain.*;
 import com.crown.university.university.repo.DepartmentRepository;
 import com.crown.university.university.repo.StaffRepository;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.query.UpdateOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -42,6 +44,15 @@ public class MongoDbApplication implements CommandLineRunner {
         departmentRepository.create(naturalSciences);
         departmentRepository.create(socialSciences);
 
-        System.out.println(staffRepository.findAll());
+        staffRepository.findAll().forEach(
+                staff -> System.out.println(staff)
+        );
+
+        Department naturalSciences1 = departmentRepository.read(new ObjectId("5be75e4596b0554f10e25e4f"));
+        System.out.println(naturalSciences1);
+
+        UpdateOperations<Department> ops = departmentRepository.createOperations()
+                .set("chair", new Staff(new Person("Guan", "Wang")));
+        departmentRepository.update(naturalSciences1, ops);
     }
 }

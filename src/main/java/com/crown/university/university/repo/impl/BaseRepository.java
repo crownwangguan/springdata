@@ -9,7 +9,6 @@ import org.mongodb.morphia.query.UpdateResults;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class BaseRepository<T, ID extends Serializable> implements CrudRepository<T, ID> {
 
@@ -25,7 +24,6 @@ public class BaseRepository<T, ID extends Serializable> implements CrudRepositor
     public Key<T> create(T entity) {
         return datastore.save(entity);
     }
-
 
     @Override
     public T read(ID id) {
