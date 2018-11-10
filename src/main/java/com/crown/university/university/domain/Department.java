@@ -1,39 +1,28 @@
 package com.crown.university.university.domain;
 
 
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.*;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-/**
- * Mongo Document for a Department of study at the University.
- */
-@Document
+@Entity("departments")
+@Indexes({
+        @Index(fields = {@Field("name")})
+})
 public class Department {
     @Id
-    private Integer id;
+    private ObjectId id;
 
     private String name;
 
-    @DBRef(db = "chair")
+    @Reference
     private Staff chair;
 
-    public Department(Integer id, String name, Staff chair) {
-        this.id = id;
+    public Department(String name, Staff chair) {
         this.name = name;
         this.chair = chair;
     }
 
     public Department() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {

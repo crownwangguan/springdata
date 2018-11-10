@@ -1,26 +1,30 @@
 package com.crown.university.university.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
-/**
- * Mongo Document representing a staff member of a department.
- * <p>
- */
-@Document
+@Entity("staffs")
 public class Staff {
 
     @Id
-    private Integer id;
+    private ObjectId id;
 
     private Person member;
 
-    public Staff(Integer id, Person member) {
+    public Staff() {
+    }
+
+    public Staff(ObjectId id, Person member) {
         this.id = id;
         this.member = member;
     }
 
-    public Integer getId() {
+    public Staff(Person member) {
+        this.member = member;
+    }
+
+    public ObjectId getId() {
         return id;
     }
 
